@@ -26,30 +26,29 @@ export const AuthProvider = ({ children }) => {
 
   const login = async () => {
     setLoading(true);
-
     try {
       const response = await axios.post(
-        `http://localhost:8000/auth/login`,
+        "http://localhost:8000/api/login",
         dataUser
       );
 
       const user = response.data;
 
-      if (user.status === "success" && user.role === "Admin") {
+      if (user.success === true && user.user.role === "Admin") {
         navigation(redirectPath, { replace: true });
         localStorage.setItem("user", JSON.stringify(user));
         alert("Login Berhasil, Selamat Datang Admin");
         navigation("/");
         setUser(user);
       }
-      if (user.status === "success" && user.role === "Author") {
+      if (user.success === true && user.user.role === "User") {
         navigation(redirectPath, { replace: true });
         localStorage.setItem("user", JSON.stringify(user));
         alert("Login Berhasil, Selamat Datang Author");
         navigation("/");
         setUser(user);
       }
-      if (user.status === "success" && user.role === "Student") {
+      if (user.success === true && user.user.role === "Student") {
         navigation(redirectPath, { replace: true });
         localStorage.setItem("user", JSON.stringify(user));
         alert("Login Berhasil, Selamat Datang Student");
@@ -60,7 +59,7 @@ export const AuthProvider = ({ children }) => {
       console.error(error);
       alert(
         error?.response?.data?.error ||
-          "Login Gagal, Terjadi Kesalahan Pada Server"
+          "Email atau Password salah, silahkan coba login kembali"
       );
       setError(error);
     } finally {

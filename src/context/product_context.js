@@ -5,12 +5,22 @@ const ProductsContext = React.createContext();
 
 export const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState([]);
   const fetchProducts = async () => {
     try {
+      const response = await axios.get("http://localhost:8000/api/products");
+      setProducts(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getProductByID = async (id) => {
+    try {
       const response = await axios.get(
-        "https://65cc9d71dd519126b83f161f.mockapi.io/api/v1/products"
+        `http://localhost:8000/api/products/${id}`
       );
-      setProducts(response.data);
+      setProduct(response.data.data);
     } catch (err) {
       console.log(err);
     }
@@ -24,13 +34,16 @@ export const ProductsProvider = ({ children }) => {
     <ProductsContext.Provider
       value={{
         products,
+        setProduct,
+        getProductByID,
+        product,
       }}
     >
       {children}
     </ProductsContext.Provider>
   );
 };
-// make sure use
+
 export const useProductsContext = () => {
   return useContext(ProductsContext);
 };

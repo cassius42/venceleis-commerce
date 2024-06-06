@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 
-import LogoImage from "images/logo.svg";
+import LogoImage from "images/venceleis-high-resolution-logo-transparent.png";
 import { ReactComponent as FacebookIcon } from "images/facebook-icon.svg";
 import { ReactComponent as TwitterIcon } from "images/twitter-icon.svg";
 import { ReactComponent as YoutubeIcon } from "images/youtube-icon.svg";
@@ -73,13 +73,66 @@ export default ({ background }) => {
               </LinkListItem>
             </LinkList>
           </Column>
-          
+
+          <Column>
+            <ColumnHeading>Product</ColumnHeading>
+            <LinkList>
+              <LinkListItem>
+                <Link href="#">Topi</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Baju</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Sepatu</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Celana</Link>
+              </LinkListItem>
+            </LinkList>
+          </Column>
+
+          <Column>
+            <ColumnHeading>Press</ColumnHeading>
+            <LinkList>
+              <LinkListItem>
+                <Link href="#">Logos</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Events</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Stories</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Office</Link>
+              </LinkListItem>
+            </LinkList>
+          </Column>
+
+          <Column>
+            <ColumnHeading>Legal</ColumnHeading>
+            <LinkList>
+              <LinkListItem>
+                <Link href="#">GDPR</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Privacy Policy</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Terms of Service</Link>
+              </LinkListItem>
+              <LinkListItem>
+                <Link href="#">Disclaimer</Link>
+              </LinkListItem>
+            </LinkList>
+          </Column>
           <SubscribeNewsletterColumn>
             <SubscribeNewsletterContainer>
               <ColumnHeading>Subscribe to our Newsletter</ColumnHeading>
               <SubscribeText>
-                We deliver high quality blog posts written by professionals
-                weekly. And we promise no spam.
+                We deliver what's trending on these week about fashion and
+                clothing without spam.
               </SubscribeText>
               <SubscribeForm method="get" action="#">
                 <Input type="email" placeholder="Your Email Address" />
@@ -92,10 +145,10 @@ export default ({ background }) => {
         <ThreeColRow>
           <LogoContainer>
             <LogoImg src={LogoImage} />
-            <LogoText>Treact Inc.</LogoText>
+            <LogoText>Venceleis</LogoText>
           </LogoContainer>
           <CopywrightNotice>
-            &copy; 2018 Treact Inc. All Rights Reserved.
+            &copy; 2023 Venceleis Apparel. All Rights Reserved.
           </CopywrightNotice>
           <SocialLinksContainer>
             <SocialLink href="https://facebook.com">

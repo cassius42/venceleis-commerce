@@ -98,7 +98,7 @@ const LoginPage = () => {
                   />
                   <button
                     type="submit"
-                    className="mt-5 tracking-wide font-semibold bg-primary-500 text-gray-100 w-full py-4 rounded-lg hover:bg-primary-900 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                    className="mt-5 tracking-wide font-semibold bg-primary-500 text-black w-full py-4 rounded-lg hover:bg-primary-900 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   >
                     <LoginIcon className="icon" />
                     <span className="text">{submitButtonText}</span>

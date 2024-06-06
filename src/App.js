@@ -19,10 +19,15 @@ import AboutUs from "pages/AboutUs";
 import ContactUs from "pages/ContactUs";
 import { Products } from "pages/Products";
 import { FilterProvider } from "context/filter_context";
+import RestaurantLandingPage from "demos/RestaurantLandingPage";
+import Checkout from "pages/Checkout";
+import Orders from "pages/Orders";
 
 export default function App() {
   // If you want to disable the animation just use the disabled `prop` like below on your page's component
   // return <AnimationRevealPage disabled>xxxxxxxxxx</AnimationRevealPage>;
+
+  
 
   return (
     <>
@@ -43,7 +48,7 @@ export default function App() {
                     element={<ComponentRenderer />}
                   />
                   <Route path="/thank-you" element={<ThankYouPage />} />
-                  <Route path="/" element={<MainLandingPage />} />
+                  <Route path="/" element={<RestaurantLandingPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route
@@ -53,6 +58,8 @@ export default function App() {
                   <Route path="/about-us" element={<AboutUs />} />
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/products" element={<Products />} />
+                  <Route path="/Checkout" element={<Checkout />} />
+                  <Route path="/Orders" element={<Orders />} />
                 </Routes>
               </CartProvider>
             </FilterProvider>

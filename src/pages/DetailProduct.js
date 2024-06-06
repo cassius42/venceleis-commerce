@@ -11,13 +11,14 @@ import axios from "axios";
 import { formatPrice } from "helpers/helpers";
 import { FaStar, FaStarHalf, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useProductsContext } from "context/product_context";
 
 const DetailProduct = () => {
   const { id } = useParams();
   const { addItem, items, updateItemQuantity } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [product, setProduct] = useState({});
+  const { product, setProduct, getProductByID } = useProductsContext();
   const [showModal, setShowModal] = useState(false);
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -52,6 +53,32 @@ const DetailProduct = () => {
   const CancelButton = tw.button`text-sm mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md ml-5 focus:outline-none cursor-pointer`;
 
   const handleAddToCart = () => {
+    if (selectedItem.stock === 0) {
+      toast.error(`Produk ini telah habis`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
+    if (!selectedColor) {
+      toast.error(`Silahkan pilih warna terlebih dahulu`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
     if (selectedItem && selectedColor) {
       const quantityNumber = Number(quantity);
       const priceNumber = parseFloat(selectedItem.price);
@@ -99,19 +126,23 @@ const DetailProduct = () => {
     }
   };
 
-  useEffect(() => {
-    const getProduct = async () => {
-      try {
-        const response = await axios.get(
-          `https://65cc9d71dd519126b83f161f.mockapi.io/api/v1/products/${id}`
-        );
-        setProduct(response.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  // useEffect(() => {
+  //   const getProduct = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `https://65cc9d71dd519126b83f161f.mockapi.io/api/v1/products/${id}`
+  //       );
+  //       setProduct(response.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
 
-    getProduct();
+  //   getProduct();
+  // }, [id]);
+
+  useEffect(() => {
+    getProductByID(id);
   }, [id]);
 
   const handleChangePrice = () => {
@@ -128,6 +159,14 @@ const DetailProduct = () => {
   }, [quantity, product.price]);
 
   console.log("product", product);
+
+  const availableStock = () => {
+    if (product.stock === 0) {
+      return <p>Not in Stock</p>;
+    } else {
+      return <p>In Stock</p>;
+    }
+  };
 
   return (
     <AnimationRevealPage>
@@ -201,9 +240,15 @@ const DetailProduct = () => {
               </RatingReviews>
               <Description>{product.description}</Description>
               <div>
-                <p className="mb-2">Available : In Stock</p>
-                <p className="mb-2">SKU : {product.stock}</p>
-                <p className="mb-2">Company : {product.company}</p>
+                <p className="mb-2 flex">
+                  Available : &nbsp; <b>{availableStock()}</b>
+                </p>
+                <p className="mb-2">
+                  SKU : <b>{product.stock}</b>
+                </p>
+                <p className="mb-2">
+                  Company : <b>{product.company}</b>
+                </p>
                 <hr className="my-4 h-1 border bg-gray-500" />
 
                 <div className="flex">

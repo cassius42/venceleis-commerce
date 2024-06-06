@@ -21,6 +21,8 @@ const Filters = () => {
     clearFilters,
   } = useFilterContext();
 
+  console.log("ALL PRODUKKKKK", all_products);
+
   const categories = getUniqueValues(all_products, "category");
   const companies = getUniqueValues(all_products, "company");
   const colors = getUniqueValues(all_products, "colors");

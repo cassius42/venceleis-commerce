@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import { IoCart } from "react-icons/io5";
 import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
-
-import logo from "../../images/cek-toko-sebelah.png";
+import logo from "../../images/venceleis-high-resolution-logo-transparent.png";
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg";
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { useCart } from "react-use-cart";
 import { Link } from "react-router-dom";
+import { AuthProvider, useAuth } from "context/AuthProvider.js";
+import { useNavigate } from "react-router-dom";
+
+import { FaUser } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 
 const Header = tw.header`
   flex justify-between items-center
@@ -28,6 +33,13 @@ export const NavLink = tw.a`
   pb-1 border-b-2 border-transparent hover:border-primary-500 hocus:text-primary-500
 `;
 
+export const SignupButton = tw(NavLink)`
+  lg:mx-0
+  px-5 py-3 rounded bg-primary-500 text-gray-100
+  hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline
+  border-b-0
+`;
+
 export const PrimaryLink = tw(NavLink)`
   lg:mx-0
   px-8 py-3 rounded bg-primary-500 text-gray-100
@@ -36,10 +48,10 @@ export const PrimaryLink = tw(NavLink)`
 `;
 
 export const LogoLink = styled(NavLink)`
-  ${tw`flex items-center font-black border-b-0 text-2xl! ml-0!`};
+  ${tw`flex items-center font-black border-b-0 text-lg! text-center ml-0!`};
 
   img {
-    ${tw`w-40 mr-3`}
+    ${tw`w-[140px] mr-10`}
   }
 `;
 
@@ -91,20 +103,112 @@ export default ({
    */
   const { totalItems } = useCart();
   console.log("totalItems", totalItems);
+
+  const [isDropdown, setIsDropdown] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { logout } = useAuth();
+  const dropdownRef = useRef(null);
+
+  function handleClickOutside(event) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      event.target.tagName !== "BUTTON"
+    ) {
+      setIsDropdown(false);
+    }
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        event.target.tagName !== "BUTTON"
+      ) {
+        setIsDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  const handleDropdown = () => {
+    setIsDropdown(!isDropdown);
+  };
+
+  const OrderButton = () => {
+    const navigate = useNavigate();
+
+    const handleOrderButtonClick = () => {
+      navigate("/orders");
+    };
+
+    return (
+      <button
+        onClick={handleOrderButtonClick}
+        className="flex px-4 py-2 text-gray-800 hover:bg-gray-200 w-full pointer-events-auto"
+      >
+        {" "}
+        <MdOutlineShoppingCartCheckout className="my-auto text-sm mr-2" />
+        Order
+      </button>
+    );
+  };
+
+  const checkUser = () => {
+    if (user) {
+      const capitalizedFirstName =
+        user.user.name.charAt(0).toUpperCase() + user.user.name.slice(1);
+      return (
+        <div
+          className="relative text-lg my-2 lg:text-sm lg:mx-6 lg:my-auto
+  font-bold tracking-wide transition duration-300
+  px-4 py-2 rounded-md shadow-lg hover:border-primary-500 hover:bg-gray-500 hover:text-white cursor-pointer z-10"
+        >
+          <button onClick={handleDropdown} className="flex">
+            {" "}
+            <FaUser className="my-auto text-sm mr-2 " />
+            {capitalizedFirstName}
+          </button>
+          {isDropdown && (
+            <div
+              ref={dropdownRef}
+              className="absolute top-full right-0 mt-2 bg-white border rounded-md shadow-md "
+            >
+              <OrderButton />
+              <button
+                onClick={logout}
+                className="flex px-4 py-2 text-gray-800 hover:bg-gray-200 w-full pointer-events-auto"
+              >
+                {" "}
+                <MdLogout className="my-auto text-sm mr-2" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    } else {
+      return (
+        <>
+          <NavLink href="/login">Login</NavLink>
+          <SignupButton
+            css={roundedHeaderButton && tw`rounded-full`}
+            href="/Signup"
+          >
+            Sign Up
+          </SignupButton>
+        </>
+      );
+    }
+  };
+
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink>
-        <Link to={"/components/landingPages/RestaurantLandingPage#"}>Home</Link>
-      </NavLink>
-      <NavLink>
-        <Link to={"/products"}>Products</Link>
-      </NavLink>
-      <NavLink>
-        <Link to={"/about-us"}>About Us</Link>
-      </NavLink>
-      <NavLink>
-        <Link to={"/contact-us"}>Contact Us</Link>
-      </NavLink>
       <NavLink tw="lg:ml-12!">
         <Link to="/cart">
           <CartContainer>
@@ -112,16 +216,21 @@ export default ({
             <TotalItems>{totalItems}</TotalItems>
           </CartContainer>
         </Link>
-      <NavLink href="/#">Harga</NavLink>
-      <NavLink href="/#">Tentang Kami</NavLink>
-      <NavLink href="/#">Kontak</NavLink>
-      <NavLink href="/#" tw="lg:ml-12!">
-        Login
       </NavLink>
-      <NavLink href="/login">Login</NavLink>
-      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#">
-        Sign Up
-      </PrimaryLink>
+      <NavLink>
+        <Link to="/products">Produk</Link>
+      </NavLink>
+
+      <NavLink>
+        <Link to="/about-us">Tentang Kami</Link>
+      </NavLink>
+      <NavLink>
+        <Link to="/contact-us">Kontak</Link>
+      </NavLink>
+      {/* <NavLink href="/#" tw="lg:ml-12!">
+        Login
+      </NavLink> */}
+      {checkUser()}
     </NavLinks>,
   ];
 
@@ -132,7 +241,7 @@ export default ({
   const defaultLogoLink = (
     <LogoLink href="/">
       <img src={logo} alt="logo" />
-      Lebih Mudah Murah
+      Best Trending and Cheapest Outfit!
     </LogoLink>
   );
 

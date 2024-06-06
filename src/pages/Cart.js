@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "react-use-cart";
 import Header from "../components/headers/light";
 import Footer from "../components/footers/FiveColumnWithInputForm.js";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import tw from "twin.macro";
 import { formatPrice } from "helpers/helpers";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 
 const Cart = () => {
@@ -33,6 +33,15 @@ const Cart = () => {
         (cartItem.price ? parseFloat(cartItem.price) : 0) * cartItem.quantity,
       0
     );
+  };
+
+  const handleCheckout = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      navigate("/login");
+    } else {
+      navigate("/checkout");
+    }
   };
 
   return (
@@ -127,8 +136,11 @@ const Cart = () => {
                 </h3>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-end mt-4">
-                <button className="bg-blue-500 px-4 py-2 text-white rounded-md mb-2 md:mb-0 md:mr-2 hover:bg-blue-700">
-                  Order Now
+                <button
+                  className="bg-blue-500 px-4 py-2 text-white rounded-md mb-2 md:mb-0 md:mr-2 hover:bg-blue-700"
+                  onClick={handleCheckout}
+                >
+                  Bayar Sekarang
                 </button>
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"

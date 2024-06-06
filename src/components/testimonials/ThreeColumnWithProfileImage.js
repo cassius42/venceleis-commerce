@@ -3,13 +3,16 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { css } from "styled-components/macro"; //eslint-disable-line
 import { ContentWithPaddingXl, Container } from "components/misc/Layouts.js";
-import { SectionHeading as Heading, Subheading as SubheadingBase } from "components/misc/Headings.js";
+import {
+  SectionHeading as Heading,
+  Subheading as SubheadingBase,
+} from "components/misc/Headings.js";
 import { ReactComponent as SvgDecoratorBlob1 } from "images/svg-decorator-blob-7.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "images/svg-decorator-blob-8.svg";
 
 const Subheading = tw(SubheadingBase)`text-center`;
-const Testimonials = tw.div`flex flex-col lg:flex-row items-center lg:items-stretch`;
-const TestimonialContainer = tw.div`mt-16 lg:w-1/3`;
+const Testimonials = tw.div`flex flex-col lg:flex-row items-center lg:items-stretch gap-x-8`;
+const TestimonialContainer = tw.div`mt-16 lg:w-1/3 rounded-xl shadow-xl border border-t-0 bg-white py-4`;
 const Testimonial = tw.div`px-4 text-center max-w-xs mx-auto flex flex-col items-center`;
 const Image = tw.img`w-20 h-20 rounded-full`;
 const Quote = tw.blockquote`mt-5 text-gray-600 font-medium leading-loose`;
@@ -31,9 +34,9 @@ export default ({
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3.25&w=512&h=512&q=80",
       quote:
         "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-      customerName: "Charlotte Hale"
-    }
-  ]
+      customerName: "Charlotte Hale",
+    },
+  ],
 }) => {
   return (
     <Container>

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useProductsContext } from "context/product_context";
+import { FaSearch } from "react-icons/fa";
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const Header = tw(SectionHeading)``;
@@ -81,14 +82,16 @@ const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
 `;
 
 export default ({ heading = "Checkout the Menu" }) => {
+  const { product, getProductByID } = useProductsContext();
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [tabsKeys, setTabsKeys] = useState([
     "Best Sellers",
-    "Main",
-    "Soup",
-    "Desserts",
+    "Kaos",
+    "Sepatu",
+    "Topi",
+    "Celana",
   ]);
   const [activeTab, setActiveTab] = useState("Best Sellers");
   const { addItem, updateItemQuantity, items } = useCart();
@@ -99,12 +102,21 @@ export default ({ heading = "Checkout the Menu" }) => {
   };
 
   const tabs = {
-    "Best Sellers": products
-      .sort((a, b) => b.stars - a.stars) // Sort by stars in descending order
-      .slice(0, 8), // Get the top 8 items
-    Main: getRandomCards(),
-    Soup: getRandomCards(),
-    Desserts: getRandomCards(),
+    "Best Sellers": products.sort((a, b) => b.stars - a.stars).slice(0, 8),
+    Kaos: products.filter(
+      (product) => product.category && product.category.toLowerCase() === "kaos"
+    ),
+    Sepatu: products.filter(
+      (product) =>
+        product.category && product.category.toLowerCase() === "sepatu"
+    ),
+    Topi: products.filter(
+      (product) => product.category && product.category.toLowerCase() === "topi"
+    ),
+    Celana: products.filter(
+      (product) =>
+        product.category && product.category.toLowerCase() === "celana"
+    ),
   };
 
   const openModal = (item) => {
@@ -124,6 +136,18 @@ export default ({ heading = "Checkout the Menu" }) => {
 
   const handleBuyNow = (e) => {
     e.preventDefault();
+    if (selectedItem.stock === 0) {
+      toast.error(`Produk ini telah habis`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
 
     if (selectedItem) {
       const quantityNumber = Number(quantity);
@@ -154,6 +178,10 @@ export default ({ heading = "Checkout the Menu" }) => {
       );
     }
   };
+
+  // const getProductByID = (cardID) => {
+  //   return <Link to={`/detail-product/${cardID}`}></Link>;
+  // };
 
   return (
     <Container>
@@ -203,13 +231,24 @@ export default ({ heading = "Checkout the Menu" }) => {
                   <Link to={`/detail-product/${card.id}`}>
                     <CardImageContainer
                       image={card.image}
+                      rating={card.rating}
                       className="flex items-center justify-center"
+                      onClick={() => getProductByID(card.id)}
                     />
                   </Link>
-                  <CardButton onClick={() => openModal(card)}>
-                    Buy Now
-                  </CardButton>
+                  <FaSearch className="search-icon" />
+                  <div>
+                    <CardButton onClick={() => openModal(card)}>
+                      Buy Now
+                    </CardButton>
+                  </div>
                 </Card>
+                <div className="flex justify-between">
+                  <span>
+                    {""} ⭐ {card.stars} ({card.reviews})
+                  </span>
+                  <p>{card.name}</p>
+                </div>
               </CardContainer>
             ))}
           </TabContent>
@@ -261,7 +300,7 @@ const getRandomCards = () => {
       price: "$5.99",
       rating: "5.0",
       reviews: "87",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -271,7 +310,7 @@ const getRandomCards = () => {
       price: "$3.99",
       rating: "4.5",
       reviews: "34",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -281,7 +320,7 @@ const getRandomCards = () => {
       price: "$3.99",
       rating: "3.9",
       reviews: "26",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -291,7 +330,7 @@ const getRandomCards = () => {
       price: "$3.99",
       rating: "4.2",
       reviews: "95",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -301,7 +340,7 @@ const getRandomCards = () => {
       price: "$2.99",
       rating: "5.0",
       reviews: "61",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -311,7 +350,7 @@ const getRandomCards = () => {
       price: "$7.99",
       rating: "4.9",
       reviews: "89",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -321,7 +360,7 @@ const getRandomCards = () => {
       price: "$8.99",
       rating: "4.6",
       reviews: "12",
-      url: "#"
+      url: "#",
     },
     {
       imageSrc:
@@ -331,8 +370,8 @@ const getRandomCards = () => {
       price: "$7.99",
       rating: "4.2",
       reviews: "19",
-      url: "#"
-    }
+      url: "#",
+    },
   ];
 
   // Shuffle array
