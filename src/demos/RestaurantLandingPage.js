@@ -158,7 +158,7 @@ export default () => {
         text={
           <>
             People around you are ordering the most trending outfit using the{" "}
-            <HighlightedTextInverse>Treact App.</HighlightedTextInverse>
+            <HighlightedTextInverse>Tees App.</HighlightedTextInverse>
           </>
         }
       />
